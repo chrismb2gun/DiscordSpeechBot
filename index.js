@@ -274,19 +274,21 @@ discordClient.on('message', async (msg) => {
     }
 })
 
+const appName = "interpreter";
+
 function getHelpString() {
     let out = '**VOICE COMMANDS:**\n'
         out += '```'
-        out += 'music help\n'
-        out += 'music play [random, favorites, <genre> or query]\n'
-        out += 'music skip\n'
-        out += 'music pause/resume\n'
-        out += 'music shuffle\n'
-        out += 'music genres\n'
-        out += 'music set favorite\n'
-        out += 'music favorites\n'
-        out += 'music list\n'
-        out += 'music clear list\n';
+        out += appName + ' help\n'
+        out += appName + ' play [random, favorites, <genre> or query]\n'
+        out += appName + ' skip\n'
+        out += appName + ' pause/resume\n'
+        out += appName + ' shuffle\n'
+        out += appName + ' genres\n'
+        out += appName + ' set favorite\n'
+        out += appName + ' favorites\n'
+        out += appName + ' list\n'
+        out += appName + ' clear list\n';
         out += '```'
 
         out += '**TEXT COMMANDS:**\n'
@@ -386,13 +388,15 @@ function process_commands_query(query, mapKey, userid) {
 
     let out = null;
 
-    const regex = /^music ([a-zA-Z]+)(.+?)?$/;
+    const regex = new RegExp("^" + appName + "([a-zA-Z]+)(.+?)?$", ""); // /^music ([a-zA-Z]+)(.+?)?$/;
     const m = query.toLowerCase().match(regex);
     if (m && m.length) {
         const cmd = (m[1]||'').trim();
         const args = (m[2]||'').trim();
 
-        switch(cmd) {
+        switch (cmd) {
+            case 'rename':
+                appName = args;
             case 'help':
                 out = _CMD_HELP;
                 break;
