@@ -274,7 +274,7 @@ discordClient.on('message', async (msg) => {
     }
 })
 
-var appName = "space";
+var appName = "Hey";
 
 function getHelpString() {
     let out = '**VOICE COMMANDS:**\n'
@@ -503,7 +503,7 @@ async function music_message(message, mapKey) {
                     try {
                         const arr = await youtube_tracks_from_playlist(qry);
                         for (let item of arr) {
-                            val.text_Channel.send(out, { tts: true });
+                            val.text_Channel.send(item, { tts: true });
                             addToQueue(item, mapKey);
                         }
                         message.react(EMOJI_GREEN_CIRCLE)
