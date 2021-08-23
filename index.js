@@ -388,7 +388,7 @@ function process_commands_query(query, mapKey, userid) {
 
     let out = null;
 
-    const regex = new RegExp("^interpreter ([a-zA-Z]+)(.+?)?$"); // /^music ([a-zA-Z]+)(.+?)?$/;
+    const regex = new RegExp(`^${appName} ([a-zA-Z]+)(.+?)?$`); // /^music ([a-zA-Z]+)(.+?)?$/;
                                                                          // /^interpreter ([a-zA-Z]+)(.+?)?$/
 
     console.log(regex);
