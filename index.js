@@ -469,8 +469,7 @@ function process_commands_query(query, mapKey, userid) {
     if (out != null && out.length) {
         // out = '<@' + userid + '>, ' + out;
         console.log('text_Channel out: ' + out)
-        const val = guildMap.get(mapKey);
-        val.text_Channel.send(out, {tts: true})
+        const val = guildMap.get(mapKey);      
     }
 }
 
@@ -488,7 +487,7 @@ async function music_message(message, mapKey) {
                 if (mapKey in GUILD_FAVORITES) {
                     let arr = GUILD_FAVORITES[mapKey];
                     if (arr.length) {
-                        for (let item of arr)     {
+                        for (let item of arr) {
                             addToQueue(item, mapKey)
                         }
                         message.react(EMOJI_GREEN_CIRCLE)
@@ -503,8 +502,10 @@ async function music_message(message, mapKey) {
                 if (isYoutube(qry) && isYoutubePlaylist(qry)) {
                     try {
                         const arr = await youtube_tracks_from_playlist(qry);
-                        for (let item of arr)
+                        for (let item of arr) {
+                            val.text_Channel.send(out, { tts: true })
                             addToQueue(item, mapKey)
+                        }
                         message.react(EMOJI_GREEN_CIRCLE)
                     } catch (e) {
                         console.log('music_message 476:' + e)
