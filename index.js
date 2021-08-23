@@ -401,7 +401,7 @@ function process_commands_query(query, mapKey, userid) {
 
         switch (cmd) {
             case 'rename':
-                appName = args;
+                appName = args.replace(/\./g,"");
             case 'help':
                 out = _CMD_HELP;
                 break;
