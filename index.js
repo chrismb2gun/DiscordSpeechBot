@@ -74,21 +74,15 @@ const SETTINGS_FILE = 'settings.json';
 
 let DISCORD_TOK = null;
 let WITAPIKEY = null; 
-let SPOTIFY_TOKEN_ID = null;
-let SPOTIFY_TOKEN_SECRET = null;
 
 function loadConfig() {
     if (fs.existsSync(SETTINGS_FILE)) {
         const CFG_DATA = JSON.parse( fs.readFileSync(SETTINGS_FILE, 'utf8') );
         DISCORD_TOK = CFG_DATA.discord_token;
         WITAPIKEY = CFG_DATA.wit_ai_token;
-        SPOTIFY_TOKEN_ID = CFG_DATA.spotify_token_id;
-        SPOTIFY_TOKEN_SECRET = CFG_DATA.spotify_token_secret;
     } else {
         DISCORD_TOK = process.env.DISCORD_TOK;
         WITAPIKEY = process.env.WITAPIKEY;
-        SPOTIFY_TOKEN_ID = process.env.SPOTIFY_TOKEN_ID;
-        SPOTIFY_TOKEN_SECRET = process.env.SPOTIFY_TOKEN_SECRET;
     }
     if (!DISCORD_TOK || !WITAPIKEY)
         throw 'failed loading config #113 missing keys!'
@@ -493,19 +487,7 @@ async function music_message(message, mapKey) {
                     }
                 } else {
                     message.channel.send('No favorites yet.')
-                }
-            }
-            else if (isSpotify(qry)) {
-                try {
-                    const arr = await spotify_tracks_from_playlist(qry);
-                    console.log(arr.length + ' spotify items from playlist')
-                    for (let item of arr)
-                        addToQueue(item, mapKey);
-                    message.react(EMOJI_GREEN_CIRCLE)
-                } catch(e) {
-                    console.log('music_message 464:' + e)
-                    message.channel.send('Failed processing spotify link: ' + qry);
-                }
+                }            
             } else {
 
                 if (isYoutube(qry) && isYoutubePlaylist(qry)) {
@@ -579,16 +561,7 @@ async function music_message(message, mapKey) {
 
         } else if (args[0] == _CMD_RANDOM) {
 
-            let arr = await spotify_new_releases();
-            if (arr.length) {
-                arr = shuffle(arr);
-                // let item = arr[Math.floor(Math.random() * arr.length)];
-                for (let item of arr)
-                    addToQueue(item, mapKey);
-                message.react(EMOJI_GREEN_CIRCLE)
-            } else {
-                message.channel.send('no results for random');
-            }
+           
 
         } else if (args[0] == _CMD_GENRES) {
 
@@ -603,17 +576,7 @@ async function music_message(message, mapKey) {
 
         } else if (args[0] == _CMD_GENRE) {
 
-            const genre = args.slice(1).join(' ').trim();
-            let arr = await spotify_recommended(genre);
-            if (arr.length) {
-                arr = shuffle(arr);
-                // let item = arr[Math.floor(Math.random() * arr.length)];
-                for (let item of arr)
-                    addToQueue(item, mapKey);
-                message.react(EMOJI_GREEN_CIRCLE)
-            } else {
-                message.channel.send('no results for genre: ' + genre);
-            }
+            
 
         } else if (args[0] == _CMD_FAVORITES) {
             const favs = getFavoritesString(mapKey);
@@ -1049,105 +1012,3 @@ function load_yt_cache() {
     }
 }
 load_yt_cache();
-//////////////////////////////////////////
-//////////////////////////////////////////
-//////////////////////////////////////////
-
-
-//////////////////////////////////////////
-//////////////// SPOTIFY /////////////////
-//////////////////////////////////////////
-const Spotify = require('node-spotify-api');
-const spotifyClient = new Spotify({
-    id: SPOTIFY_TOKEN_ID,
-    secret: SPOTIFY_TOKEN_SECRET
-});
-
-function isSpotify(str) {
-    return str.toLowerCase().indexOf('spotify.com') > -1;
-}
-
-function spotify_extract_trackname(item) {
-    if ('artists' in item) {
-        let name = '';
-        for (let artist of item.artists) {
-            name += ' ' + artist.name;
-        }
-
-        let title = item.name;
-        let track = title + ' ' + name
-        return track;
-    } else if ('track' in item && 'artists' in item.track) {
-        return spotify_extract_trackname(item.track);
-    }
-}
-
-async function spotify_new_releases() {
-
-    let arr = await spotifyClient
-        .request('https://api.spotify.com/v1/browse/new-releases')
-        .then(function(data) {
-            let arr = [];
-            if ('albums' in data) {
-                for (let item of data.albums.items) {
-                    let track = spotify_extract_trackname(item)
-                    arr.push(track)
-                }
-            }
-            return arr;
-        })
-        .catch(function(err) {
-            console.error('spotify_new_releases: ' + err);
-        });
-
-    return arr;
-}
-
-async function spotify_recommended(genre) {
-
-    let arr = await spotifyClient
-        .request('https://api.spotify.com/v1/recommendations?seed_genres=' + genre)
-        .then(function(data) {
-            let arr = [];
-            if ('tracks' in data) {
-                for (let item of data.tracks) {
-                    let track = spotify_extract_trackname(item)
-                    arr.push(track)
-                }
-            }
-            return arr;
-        })
-        .catch(function(err) {
-            console.error('spotify_recommended: ' + err);
-        });
-
-    return arr;
-}
-
-async function spotify_tracks_from_playlist(spotifyurl) {
-
-    const regex = /\/playlist\/(.+?)(\?.+)?$/;
-    const found = spotifyurl.match(regex);
-    const url = 'https://api.spotify.com/v1/playlists/' + found[1] + '/tracks';
-    console.log(url)
-    let arr = await spotifyClient
-        .request(url)
-        .then(function(data) {
-            let arr = [];
-            if ('items' in data) {
-                for (let item of data.items) {
-                    let track = spotify_extract_trackname(item)
-                    arr.push(track)
-                }
-            }
-            return arr;
-        })
-        .catch(function(err) {
-            console.error('spotify_tracks_from_playlist: ' + err);
-        });
-
-    return arr;
-}
-//////////////////////////////////////////
-//////////////////////////////////////////
-//////////////////////////////////////////
