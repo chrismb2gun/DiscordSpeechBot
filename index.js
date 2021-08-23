@@ -274,7 +274,7 @@ discordClient.on('message', async (msg) => {
     }
 })
 
-const appName = "interpreter";
+var appName = "interpreter";
 
 function getHelpString() {
     let out = '**VOICE COMMANDS:**\n'
