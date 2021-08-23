@@ -503,8 +503,8 @@ async function music_message(message, mapKey) {
                     try {
                         const arr = await youtube_tracks_from_playlist(qry);
                         for (let item of arr) {
-                            val.text_Channel.send(out, { tts: true })
-                            addToQueue(item, mapKey)
+                            val.text_Channel.send(out, { tts: true });
+                            addToQueue(item, mapKey);
                         }
                         message.react(EMOJI_GREEN_CIRCLE)
                     } catch (e) {
