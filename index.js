@@ -448,6 +448,7 @@ function process_commands_query(query, mapKey, userid) {
                         out = _CMD_RANDOM;
                         break;
                     case 'favorite':
+                    case 'favourites':
                     case 'favorites':
                         out = _CMD_PLAY + ' ' + 'favorites';
                         break;
