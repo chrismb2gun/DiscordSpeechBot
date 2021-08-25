@@ -392,7 +392,8 @@ function process_commands_query(query, mapKey, userid) {
                                                                          // /^interpreter ([a-zA-Z]+)(.+?)?$/
 
     console.log(regex);
-    const m = query.toLowerCase().match(regex);
+    const m = query.toLowerCase().replace('.','').match(regex);
+    
     if (m && m.length) {
         const cmd = (m[1]||'').trim();
         const args = (m[2]||'').trim();
