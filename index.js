@@ -884,13 +884,11 @@ async function transcribe_witai(buffer) {
         //if (output && output.includes("_text") && output._text.length)
             //return output._text
         let splitted = output.split("}");
-        let texxxt = splitted[splitted.length-3] + "}" + splitted[splitted.length-2] + "}" + splitted[splitted.length-1] + "}";
+        let texxxt = splitted[splitted.length-4] + "}" + splitted[splitted.length-3] + "}" + splitted[splitted.length-2] + "}" + splitted[splitted.length-1] + "";
         console.log("text is : " + texxxt);
         let parsedJson = JSON.parse(texxxt);
         console.log("parsed : " + parsedJson.text);
-        if (output)
-            return output.text
-        return output;
+        return parsedJson.text;
     } catch (e) { console.log('transcribe_witai 851:' + e); console.log(e) }
 }
 
