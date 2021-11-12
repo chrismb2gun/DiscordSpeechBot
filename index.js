@@ -168,6 +168,7 @@ discordClient.on('ready', () => {
 discordClient.login(DISCORD_TOK)
 
 const PREFIX = '!';
+const _CMD_RESET       = PREFIX + 'reset';
 const _CMD_HELP        = PREFIX + 'help';
 const _CMD_JOIN        = PREFIX + 'join';
 const _CMD_LEAVE       = PREFIX + 'leave';
@@ -241,6 +242,9 @@ discordClient.on('message', async (msg) => {
             }
         } else if (msg.content.trim().toLowerCase() == _CMD_HELP) {
             msg.reply(getHelpString());
+        }
+        else if (msg.content.trim().toLowerCase() == _CMD_RESET) {
+            appName = "hey";
         }
         else if (msg.content.trim().toLowerCase() == _CMD_DEBUG) {
             console.log('toggling debug mode')
