@@ -883,6 +883,10 @@ async function transcribe_witai(buffer) {
         stream.destroy()        
         //if (output && output.includes("_text") && output._text.length)
             //return output._text
+        console.log("output is : " + output);
+        console.log("output.text is : " + output.text);
+        let splitted = output.split("\"");
+        console.log("splitted is : " + splited[3]);
         if (output)
             return output.text
         return output;
