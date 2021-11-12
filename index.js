@@ -882,7 +882,7 @@ async function transcribe_witai(buffer) {
         stream.destroy()        
         //if (output && output.includes("_text") && output._text.length)
             //return output._text
-        if (output && output.text.length)
+        if (output)
             return output.text
         return output;
     } catch (e) { console.log('transcribe_witai 851:' + e); console.log(e) }
