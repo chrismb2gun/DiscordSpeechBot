@@ -371,6 +371,7 @@ function speak_impl(voice_Connection, mapKey) {
             try {
                 let new_buffer = await convert_audio(buffer)
                 let out = await transcribe(new_buffer);
+                console.log("Transcribed: " + out)
                 if (out != null)
                     process_commands_query(out, mapKey, user.id);
             } catch (e) {
