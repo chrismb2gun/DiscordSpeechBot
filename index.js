@@ -879,10 +879,10 @@ async function transcribe_witai(buffer) {
         const output = await extractSpeechIntent(WITAPIKEY, stream, contenttype)
         witAI_lastcallTS = Math.floor(new Date());
         console.log(output)
-        stream.destroy()
-        if (output && output.includes("_text") && output._text.length)
-            return output._text
-        if (output && output.includes("text") && output.text.length)
+        stream.destroy()        
+        //if (output && output.includes("_text") && output._text.length)
+            //return output._text
+        if (output && output.text.length)
             return output.text
         return output;
     } catch (e) { console.log('transcribe_witai 851:' + e); console.log(e) }
