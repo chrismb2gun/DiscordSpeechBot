@@ -274,7 +274,7 @@ discordClient.on('message', async (msg) => {
     }
 })
 
-var appName = "Hey";
+var appName = "hey";
 
 function getHelpString() {
     let out = '**VOICE COMMANDS:**\n'
