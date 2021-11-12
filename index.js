@@ -886,7 +886,7 @@ async function transcribe_witai(buffer) {
         console.log("output is : " + output);
         console.log("output.text is : " + output.text);
         let splitted = output.split("\"");
-        console.log("splitted is : " + splited[3]);
+        console.log("splitted is : " + splitted[3]);
         if (output)
             return output.text
         return output;
